@@ -2,7 +2,9 @@ import flet as ft
 from random import randint
 from pages.home import home_page
 from components.menu import menu
+from components.memory_usage import memory_profiler
 
+@memory_profiler
 def main(page: ft.Page):
     page.title = "My Chat"
     page.window.width = 300
@@ -24,10 +26,7 @@ def main(page: ft.Page):
     # Add the content_area to the page first
     page.add(menu_bar, content_area)
 
-    # Initial page
-    # show_page(home_page())
-
-     # Show the session ID on the initial page
+    # Initial page`s content will show the session ID on the initial page
     show_page(home_page(session_id))
 
     

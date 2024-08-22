@@ -1,7 +1,8 @@
 import flet as ft
-from menu import menu
-import page1
-import page2
+from controllers.menu import menu
+
+import pages.page1 as page1
+import pages.page2 as page2
 
 class PageControl:
     def __init__(self, page: ft.Page):

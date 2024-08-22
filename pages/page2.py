@@ -1,6 +1,8 @@
 import flet as ft
 
 def page2_content(pc):
+    
+
     return ft.Column(
         controls=[
             ft.Text("This is Page 2"),

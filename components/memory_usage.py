@@ -29,4 +29,5 @@ def my_flet_function():
     # Your Flet app code here
     pass
 
-my_flet_function()
+if __name__ == "__main__":
+    my_flet_function()

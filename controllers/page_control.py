@@ -1,40 +1,37 @@
-# import flet as ft
-from flet import Page, Text
+import flet as ft
 from controllers.menu import menu
-
-import pages.auth.sign_in as sign_in
-import pages.page2 as page2
+from pages.auth.sign_in import Page1
+from pages.page2 import Page2
 
 class PageControl:
-    def __init__(self, page: Page):
-        """
-        Initializes a new instance of the `PageControl` class.
-
-        Args:
-            page (ft.Page): The page object to associate with the page control.
-
-        Initializes the `page` attribute with the provided `page` object.
-        Sets the `appbar` attribute of the `page` object to the result of calling the `menu` function with `self` as the argument.
-        Initializes the `pages` dictionary with mappings from page names to their content functions.
-
-        Example:
-            page_control = PageControl(page)
-        """
+    def __init__(self, page: ft.Page):
         self.page = page
-        # Set the `appbar` attribute of the `page` object to the result of calling the `menu` function with `self` as the argument.
         self.page.appbar = menu(self)
 
-        # Dictionary mapping page names to their content functions
+        # Dictionary mapping page names to their class instances
         self.pages = {
-            "page1": sign_in.page1_content,
-            "page2": page2.page2_content,
+            "Page1": Page1(self.page, self),
+            "Page2": Page2(self.page, self),
         }
 
     def load_page(self, page_name: str):
         if page_name in self.pages:
+            # Clear existing controls
             self.page.controls.clear()
-            self.page.add(self.pages[page_name](self))
+
+            # Add the new page content
+            self.page.add(self.pages[page_name].content())
+
+            # Update the page to reflect changes
+            self.page.update()
+
+            # Call did_mount if it exists
+            if hasattr(self.pages[page_name], 'did_mount'):
+                self.pages[page_name].did_mount()
         else:
             self.page.controls.clear()
-            self.page.add(Text(f"404 - Page '{page_name}' not found."))
-        self.page.update()
+            self.page.add(ft.Text(f"404 - Page '{page_name}' not found."))
+            self.page.update()
+
+    def navigate_to(self, page_name: str):
+        self.load_page(page_name)

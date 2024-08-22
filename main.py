@@ -1,22 +1,17 @@
-# import flet as ft
-from flet import Page, app
+import flet as ft
 from controllers.page_control import PageControl
 from components.memory_usage import memory_profiler
-import warnings
-
-warnings.filterwarnings('ignore', category=DeprecationWarning)
 
 @memory_profiler
-def main(page: Page):
-    page.title = "Flet App"
-    
-    page.window.width = 300
-    page.window_left = 3000
-    page.window_always_on_top = True
-    # Initialize page control
+def main(page: ft.Page):
+    page.title = "My App"
+    page.window.width =300
+    page.window.left = 3000
+    page.window.always_on_top = True
+    # Instantiate PageControl with the page instance
     pc = PageControl(page)
 
-    # Set up the initial view (Page 1)
-    pc.load_page("page1")
+    # Load the first page
+    pc.load_page("Page1")
 
-app(target=main)
+ft.app(target=main)

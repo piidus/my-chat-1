@@ -1,12 +1,23 @@
 import flet as ft
 
+class Page1(ft.Control):
+    def __init__(self, page: ft.Page, pc, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.page = page
+        self.pc = pc
 
-def page1_content(pc):
-   
+    def did_mount(self):
+        self.page.session.set("last_page", "Page1")
+        print('did mount page 1')
+        self.page.update()
 
-    return ft.Column(
-        controls=[
-            ft.Text("This is Page 1"),
-            ft.ElevatedButton("Go to Page 2", on_click=lambda _: pc.load_page("page2")),
-        ]
-    )
+
+
+    def content(self):
+        return ft.Column(
+            controls=[
+                ft.Text("This is Page 1"),
+                ft.ElevatedButton("Go to Page 2", on_click=lambda _: self.pc.load_page("Page2")),
+                ft.Text(f"Last Page: {self.page.session.get("last_page")}", selectable=False),
+            ]
+        )

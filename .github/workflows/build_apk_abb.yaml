@@ -27,7 +27,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
-        path: my_flutter_project # Specify the path if your Flutter project is in a subdirectory
+        path: my_flutter_project # Adjust if your Flutter project is in a subdirectory
 
     - name: Setup Python ${{ env.PYTHON_VERSION }}
       uses: actions/setup-python@v5
@@ -59,7 +59,7 @@ jobs:
         else
           echo "Skipping clean-up as pubspec.yaml was not found."
         fi
-      working-directory: my_flutter_project # Ensure this points to the project root
+      working-directory: my_flutter_project # Adjust this if needed
 
     - name: Build APK and AAB if pubspec.yaml exists
       run: |
@@ -69,17 +69,22 @@ jobs:
         else
           echo "Skipping build as pubspec.yaml was not found."
         fi
-      working-directory: my_flutter_project # Ensure this points to the project root
+      working-directory: my_flutter_project # Adjust this if needed
 
-    - name: List All Files in Build Directory if Exists
+    - name: Check for Build Directory
       run: |
         if [ -d "build" ]; then
-          echo "Listing all files in the build directory:"
-          find build -type f -print
+          echo "Build directory exists. Proceeding to list files."
         else
-          echo "Skipping file listing as build directory does not exist."
+          echo "Build directory does not exist. Skipping file listing."
+          exit 0
         fi
-      working-directory: my_flutter_project # Ensure this points to the project root
+      working-directory: my_flutter_project # Adjust this if needed
+
+    - name: List All Files in Build Directory
+      if: always()
+      run: |
+        find build -type f -print
 
     - name: Verify APK and AAB Existence
       id: verify-files
@@ -98,7 +103,7 @@ jobs:
           echo "Error: AAB file not found at $AAB_PATH!"
           exit 1
         fi
-      working-directory: my_flutter_project # Ensure this points to the project root
+      working-directory: my_flutter_project # Adjust this if needed
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4.3.4

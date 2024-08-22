@@ -71,10 +71,14 @@ jobs:
         fi
       working-directory: my_flutter_project # Ensure this points to the project root
 
-    - name: List All Files in Build Directory
+    - name: List All Files in Build Directory if Exists
       run: |
-        echo "Listing all files in the build directory:"
-        find build -type f -print
+        if [ -d "build" ]; then
+          echo "Listing all files in the build directory:"
+          find build -type f -print
+        else
+          echo "Skipping file listing as build directory does not exist."
+        fi
       working-directory: my_flutter_project # Ensure this points to the project root
 
     - name: Verify APK and AAB Existence

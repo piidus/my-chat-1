@@ -27,12 +27,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Clean up previous build artifacts
-      run: |
-        rm -rf build
-        flutter clean
-
-
     - name: Setup Python ${{ env.PYTHON_VERSION }}
       uses: actions/setup-python@v5
       with:
@@ -57,6 +51,12 @@ jobs:
     - name: Configure Flutter
       run: |
         flutter config --no-analytics
+
+    - name: Clean up previous build artifacts
+      run: |
+        rm -rf build
+        flutter clean
+      shell: bash
 
     - name: Build APK and AAB
       run: |

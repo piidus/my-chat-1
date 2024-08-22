@@ -6,7 +6,7 @@ def menu(pc):
         actions=[
             ft.IconButton(
                 icon=ft.icons.HOME,
-                on_click=lambda _: pc.navigate_to("Page1")
+                on_click=lambda _: pc.navigate_to("Login")
             ),
             ft.IconButton(
                 icon=ft.icons.INFO,

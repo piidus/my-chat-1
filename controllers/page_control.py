@@ -1,6 +1,6 @@
 import flet as ft
 from controllers.menu import menu
-from pages.auth.sign_in import Page1
+from pages.auth.sign_in import Login
 from pages.page2 import Page2
 
 class PageControl:
@@ -10,7 +10,7 @@ class PageControl:
 
         # Dictionary mapping page names to their class instances
         self.pages = {
-            "Page1": Page1(self.page, self),
+            "Login": Login(self.page, self),
             "Page2": Page2(self.page, self),
         }
 

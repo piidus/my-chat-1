@@ -12,6 +12,6 @@ def main(page: ft.Page):
     pc = PageControl(page)
 
     # Load the first page
-    pc.load_page("Page1")
+    pc.load_page("Login")
 
 ft.app(target=main)

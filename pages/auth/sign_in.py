@@ -1,6 +1,6 @@
 import flet as ft
 
-class Page1(ft.Control):
+class Login(ft.Control):
     def __init__(self, page: ft.Page, pc, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.page = page

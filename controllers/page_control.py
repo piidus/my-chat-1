@@ -1,11 +1,12 @@
-import flet as ft
+# import flet as ft
+from flet import Page, Text
 from controllers.menu import menu
 
 import pages.page1 as page1
 import pages.page2 as page2
 
 class PageControl:
-    def __init__(self, page: ft.Page):
+    def __init__(self, page: Page):
         """
         Initializes a new instance of the `PageControl` class.
 
@@ -35,5 +36,5 @@ class PageControl:
             self.page.add(self.pages[page_name](self))
         else:
             self.page.controls.clear()
-            self.page.add(ft.Text(f"404 - Page '{page_name}' not found."))
+            self.page.add(Text(f"404 - Page '{page_name}' not found."))
         self.page.update()

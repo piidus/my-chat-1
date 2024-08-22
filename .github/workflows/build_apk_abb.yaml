@@ -27,7 +27,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
-        path: my_flutter_project
+        path: my_flutter_project # Specify the path if your Flutter project is in a subdirectory
 
     - name: Setup Python ${{ env.PYTHON_VERSION }}
       uses: actions/setup-python@v5
@@ -35,10 +35,10 @@ jobs:
         python-version: ${{ env.PYTHON_VERSION }}
 
     - name: Install Python Dependencies
-      working-directory: my_flutter_project
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+      working-directory: my_flutter_project # Adjust this if needed
 
     - name: Setup Flutter ${{ env.FLUTTER_VERSION }}
       uses: subosito/flutter-action@v2
@@ -52,31 +52,30 @@ jobs:
         java-version: '21'
 
     - name: Configure Flutter
-      working-directory: my_flutter_project
       run: |
         flutter config --no-analytics
+      working-directory: my_flutter_project # Ensure this points to the project root
 
     - name: Clean up previous build artifacts
-      working-directory: my_flutter_project
       run: |
         rm -rf build
         flutter clean
+      working-directory: my_flutter_project # Ensure this points to the project root
 
     - name: Build APK and AAB
-      working-directory: my_flutter_project
       run: |
         flet build apk --build-version ${{ env.BUILD_VERSION }} --build-number ${{ env.BUILD_NUMBER }} --verbose
         flet build aab --build-version ${{ env.BUILD_VERSION }} --build-number ${{ env.BUILD_NUMBER }} --verbose
+      working-directory: my_flutter_project # Ensure this points to the project root
 
     - name: List All Files in Build Directory
-      working-directory: my_flutter_project
       run: |
         echo "Listing all files in the build directory:"
         find build -type f -print
+      working-directory: my_flutter_project # Ensure this points to the project root
 
     - name: Verify APK and AAB Existence
       id: verify-files
-      working-directory: my_flutter_project
       run: |
         if [ -f "$APK_PATH" ]; then
           echo "APK file found at $APK_PATH"
@@ -92,6 +91,7 @@ jobs:
           echo "Error: AAB file not found at $AAB_PATH!"
           exit 1
         fi
+      working-directory: my_flutter_project # Ensure this points to the project root
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4.3.4

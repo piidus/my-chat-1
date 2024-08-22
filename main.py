@@ -14,4 +14,4 @@ def main(page: ft.Page):
     # Load the first page
     pc.load_page("Login")
 
-ft.app(target=main)
+ft.app(target=main, assets_dir='assets')

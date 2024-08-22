@@ -26,6 +26,8 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        path: my_flutter_project
 
     - name: Setup Python ${{ env.PYTHON_VERSION }}
       uses: actions/setup-python@v5
@@ -33,6 +35,7 @@ jobs:
         python-version: ${{ env.PYTHON_VERSION }}
 
     - name: Install Python Dependencies
+      working-directory: my_flutter_project
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
@@ -49,27 +52,31 @@ jobs:
         java-version: '21'
 
     - name: Configure Flutter
+      working-directory: my_flutter_project
       run: |
         flutter config --no-analytics
 
     - name: Clean up previous build artifacts
+      working-directory: my_flutter_project
       run: |
         rm -rf build
         flutter clean
-      shell: bash
 
     - name: Build APK and AAB
+      working-directory: my_flutter_project
       run: |
         flet build apk --build-version ${{ env.BUILD_VERSION }} --build-number ${{ env.BUILD_NUMBER }} --verbose
         flet build aab --build-version ${{ env.BUILD_VERSION }} --build-number ${{ env.BUILD_NUMBER }} --verbose
 
     - name: List All Files in Build Directory
+      working-directory: my_flutter_project
       run: |
         echo "Listing all files in the build directory:"
         find build -type f -print
 
     - name: Verify APK and AAB Existence
       id: verify-files
+      working-directory: my_flutter_project
       run: |
         if [ -f "$APK_PATH" ]; then
           echo "APK file found at $APK_PATH"

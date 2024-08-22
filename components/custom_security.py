@@ -1,31 +1,30 @@
-from Crypto.PublicKey import RSA
-from Crypto.Cipher import PKCS1_OAEP
+import rsa
 
-# Generate RSA private and public keys
-key = RSA.generate(2048)
-private_key = key.export_key()
-public_key = key.publickey().export_key()
+def generate_keys():
+    # Generate RSA private and public keys
+    (public_key, private_key) = rsa.newkeys(2048)
+    return private_key, public_key
 
-def generate_message(input_text):
+
+def generate_message(input_text, public_key, private_key):
     # Convert input text to bytes
     message = str(input_text).encode('utf-8')
-    # print("Original Message:", message)
 
-    # Load the public key for encryption
-    public_key_obj = RSA.import_key(public_key)
-    cipher_encrypt = PKCS1_OAEP.new(public_key_obj)
-    encrypted_message = cipher_encrypt.encrypt(message)
+    # Encrypt the message using the public key
+    encrypted_message = rsa.encrypt(message, public_key)
 
-    # Load the private key for decryption
-    private_key_obj = RSA.import_key(private_key)
-    cipher_decrypt = PKCS1_OAEP.new(private_key_obj)
-    decrypted_message = cipher_decrypt.decrypt(encrypted_message)
+    # Decrypt the message using the private key
+    decrypted_message = rsa.decrypt(encrypted_message, private_key)
     
     return encrypted_message, decrypted_message
 
 if __name__ == '__main__':
-    encrypted_message, decrypted_message = generate_message('Hello, World!')
+    private_key, public_key = generate_keys()
+    
+    encrypted_message, decrypted_message = generate_message('Hello, World!', public_key, private_key)
 
     # Print results
+    print("Public Key:\n", public_key.save_pkcs1().decode('utf-8'))
+    print("Private Key:\n", private_key.save_pkcs1().decode('utf-8'))
     print("Encrypted Message:\n", encrypted_message)
     print("Decrypted Message:\n", decrypted_message.decode('utf-8'))

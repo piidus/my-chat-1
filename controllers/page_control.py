@@ -2,7 +2,7 @@
 from flet import Page, Text
 from controllers.menu import menu
 
-import pages.page1 as page1
+import pages.auth.sign_in as sign_in
 import pages.page2 as page2
 
 class PageControl:
@@ -26,7 +26,7 @@ class PageControl:
 
         # Dictionary mapping page names to their content functions
         self.pages = {
-            "page1": page1.page1_content,
+            "page1": sign_in.page1_content,
             "page2": page2.page2_content,
         }
 

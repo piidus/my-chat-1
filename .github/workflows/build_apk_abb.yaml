@@ -48,29 +48,28 @@ jobs:
         distribution: 'temurin'
         java-version: '21'
 
-    - name: Check for pubspec.yaml
-      id: check-pubspec
+    - name: Clean Flutter (if pubspec.yaml is found)
       run: |
-        if [ ! -f "pubspec.yaml" ]; then
-          echo "No pubspec.yaml found. Exiting the Flutter build steps."
-          exit 0
+        if [ -f "pubspec.yaml" ]; then
+          flutter clean
         else
-          echo "pubspec.yaml found. Continuing with Flutter build."
+          echo "No pubspec.yaml found. Skipping Flutter clean."
         fi
-
-    - name: Clean the build environment
-      run: |
-        flutter clean
-        rm -rf build
 
     - name: Configure Flutter
       run: |
-        flutter config --no-analytics
+        if [ -f "pubspec.yaml" ]; then
+          flutter config --no-analytics
+        fi
 
     - name: Build APK and AAB
       run: |
-        flet build apk --build-version ${{ env.BUILD_VERSION }} --build-number ${{ env.BUILD_NUMBER }} --verbose
-        flet build aab --build-version ${{ env.BUILD_VERSION }} --build-number ${{ env.BUILD_NUMBER }} --verbose
+        if [ -f "pubspec.yaml" ]; then
+          flet build apk --build-version ${{ env.BUILD_VERSION }} --build-number ${{ env.BUILD_NUMBER }} --verbose
+          flet build aab --build-version ${{ env.BUILD_VERSION }} --build-number ${{ env.BUILD_NUMBER }} --verbose
+        else
+          echo "No pubspec.yaml found. Skipping build steps."
+        fi
 
     - name: List All Files in Build Directory
       run: |

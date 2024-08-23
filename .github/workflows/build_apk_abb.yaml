@@ -56,8 +56,6 @@ jobs:
         distribution: 'temurin'
         java-version: '21'
 
-    
-
     - name: Configure Flutter
       run: |
         if [ -f "pubspec.yaml" ]; then

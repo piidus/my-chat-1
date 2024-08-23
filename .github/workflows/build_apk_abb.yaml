@@ -27,6 +27,23 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Clean Build Directory (if pubspec.yaml found)
+      run: |
+        echo "Checking for pubspec.yaml..."
+        if [ -f "pubspec.yaml" ]; then
+          echo "pubspec.yaml found. Checking if Flutter is available..."
+          if command -v flutter >/dev/null 2>&1; then
+            echo "Flutter found. Cleaning build directory..."
+            flutter clean
+          else
+            echo "Flutter not found. Skipping clean step."
+          fi
+          echo "Removing build directory..."
+          rm -rf build
+        else
+          echo "No pubspec.yaml found. Skipping clean step."
+        fi
+
     - name: Setup Python ${{ env.PYTHON_VERSION }}
       uses: actions/setup-python@v5
       with:
@@ -41,18 +58,6 @@ jobs:
       uses: subosito/flutter-action@v2
       with:
         flutter-version: ${{ env.FLUTTER_VERSION }}
-
-    - name: Clean Build Directory
-      run: |
-        echo "Checking if Flutter is available..."
-        if command -v flutter >/dev/null 2>&1; then
-          echo "Flutter found. Cleaning build directory..."
-          flutter clean
-        else
-          echo "Flutter not found. Skipping clean step."
-        fi
-        echo "Removing build directory..."
-        rm -rf build
 
     - name: Setup Java JDK
       uses: actions/setup-java@v4.2.1

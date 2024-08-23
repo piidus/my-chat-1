@@ -28,9 +28,6 @@ jobs:
 
   
 
-  build-aab:
-    r
-
   build-apk:
     runs-on: ubuntu-latest
 

@@ -48,6 +48,11 @@ jobs:
         distribution: 'temurin'
         java-version: '21'
 
+    - name: Clean the build environment
+      run: |
+        flutter clean
+        rm -rf build
+
     - name: Configure Flutter
       run: |
         flutter config --no-analytics
@@ -59,8 +64,12 @@ jobs:
 
     - name: List All Files in Build Directory
       run: |
-        echo "Listing all files in the build directory:"
-        find build -type f -print
+        if [ -d "build" ]; then
+          echo "Listing all files in the build directory:"
+          find build -type f -print
+        else
+          echo "Build directory does not exist. Skipping file listing."
+        fi
 
     - name: Verify APK and AAB Existence
       id: verify-files

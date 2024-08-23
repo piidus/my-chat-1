@@ -14,7 +14,7 @@ on:
 env:
   BUILD_NUMBER: 1
   BUILD_VERSION: 1.0.0
-  PYTHON_VERSION: 3.10.4
+  PYTHON_VERSION: 3.12.2
   FLUTTER_VERSION: 3.24.1
   APK_PATH: "build/apk/app-release.apk"
   AAB_PATH: "build/aab/app-release.aab"

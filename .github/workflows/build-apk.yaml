@@ -43,6 +43,13 @@ jobs:
         else
           echo "No pubspec.yaml found. Skipping clean step."
         fi
+    - name: Clean Build Directory-1
+      run: |
+          echo "Cleaning build directory..."
+          rm -rf build || { echo "Failed to remove build directory"; exit 1; }
+          echo "Cleaning Python bytecode..."
+          find . -name "*.pyc" -delete || { echo "Failed to remove Python bytecode"; exit 1; }
+      
 
     - name: Install Build Tools
       run: |
@@ -59,7 +66,12 @@ jobs:
         echo "Upgrading pip and setuptools..."
         python -m pip install --upgrade pip setuptools || { echo "Failed to upgrade pip or setuptools"; exit 1; }
         pip install -r requirements.txt || { echo "Failed to install requirements"; exit 1; }
-
+    
+    - name: Install Build Dependencies
+      run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential python3-dev
+      
     - name: Setup Flutter ${{ env.FLUTTER_VERSION }}
       uses: subosito/flutter-action@v2
       with:

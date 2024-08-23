@@ -48,16 +48,29 @@ jobs:
         distribution: 'temurin'
         java-version: '21'
 
+    - name: Check for pubspec.yaml
+      id: check-pubspec
+      run: |
+        if [ ! -f "pubspec.yaml" ]; then
+          echo "No pubspec.yaml found. Skipping Flutter-related steps."
+          echo "SKIP_FLUTTER=true" >> $GITHUB_ENV
+        else
+          echo "pubspec.yaml found. Proceeding with Flutter-related steps."
+          echo "SKIP_FLUTTER=false" >> $GITHUB_ENV
+
     - name: Clean the build environment
+      if: env.SKIP_FLUTTER == 'false'
       run: |
         flutter clean
         rm -rf build
 
     - name: Configure Flutter
+      if: env.SKIP_FLUTTER == 'false'
       run: |
         flutter config --no-analytics
 
     - name: Build APK and AAB
+      if: env.SKIP_FLUTTER == 'false'
       run: |
         flet build apk --build-version ${{ env.BUILD_VERSION }} --build-number ${{ env.BUILD_NUMBER }} --verbose
         flet build aab --build-version ${{ env.BUILD_VERSION }} --build-number ${{ env.BUILD_NUMBER }} --verbose
@@ -90,6 +103,7 @@ jobs:
         fi
 
     - name: Upload APK Artifact
+      if: env.SKIP_FLUTTER == 'false'
       uses: actions/upload-artifact@v4.3.4
       with:
         name: apk-build-artifact
@@ -98,6 +112,7 @@ jobs:
         overwrite: false
 
     - name: Upload AAB Artifact
+      if: env.SKIP_FLUTTER == 'false'
       uses: actions/upload-artifact@v4.3.4
       with:
         name: aab-build-artifact

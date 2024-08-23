@@ -65,6 +65,11 @@ jobs:
         distribution: 'temurin'
         java-version: '21'
 
+    - name: Verify Flutter Installation
+      run: |
+        echo "Checking Flutter version..."
+        flutter --version
+
     - name: Configure Flutter
       run: |
         echo "Configuring Flutter..."
@@ -73,7 +78,9 @@ jobs:
     - name: Build APK and AAB
       run: |
         echo "Starting APK and AAB build..."
+        echo "Flet build apk command:"
         flet build apk --build-version ${{ env.BUILD_VERSION }} --build-number ${{ env.BUILD_NUMBER }} --verbose
+        echo "Flet build aab command:"
         flet build aab --build-version ${{ env.BUILD_VERSION }} --build-number ${{ env.BUILD_NUMBER }} --verbose
 
     - name: List All Files in Build Directory

@@ -58,18 +58,14 @@ jobs:
 
     - name: Configure Flutter
       run: |
-        if [ -f "pubspec.yaml" ]; then
-          flutter config --no-analytics
-        fi
+        flutter config --no-analytics
 
     - name: Build APK and AAB
       run: |
-        if [ -f "pubspec.yaml" ]; then
-          flet build apk --build-version ${{ env.BUILD_VERSION }} --build-number ${{ env.BUILD_NUMBER }} --verbose
-          flet build aab --build-version ${{ env.BUILD_VERSION }} --build-number ${{ env.BUILD_NUMBER }} --verbose
-        else
-          echo "No pubspec.yaml found. Skipping build steps."
-        fi
+        
+        flet build apk --build-version ${{ env.BUILD_VERSION }} --build-number ${{ env.BUILD_NUMBER }} --verbose
+        flet build aab --build-version ${{ env.BUILD_VERSION }} --build-number ${{ env.BUILD_NUMBER }} --verbose
+
 
     - name: List All Files in Build Directory
       run: |

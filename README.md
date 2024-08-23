@@ -59,3 +59,31 @@ Then, apply the changes:
 source ~/.bashrc  # or source ~/.zshrc
 ```
 This will ensure that the Flutter command is available in your terminal.
+
+# use p4a to apk
+```bash
+pip install python-for-android
+pip install cython
+```
+2. install buildzer
+```bash
+pip install buildozer
+```
+```bash
+buildozer init
+```
+-   add requiremts in build.spec
+```bash
+requirements = python3,kivy,flet,rsa,sqlalchemy
+```
+-   android.permissions: Add any necessary Android permissions (e.g., for internet access).
+```bash
+android.permissions = INTERNET
+```
+3. Build the APK
+```bash
+buildozer -v android debug
+```
+```bash
+buildozer -v android release
+```

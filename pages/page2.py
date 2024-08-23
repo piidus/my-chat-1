@@ -1,12 +1,12 @@
 import flet as ft
-from components import memory_profiler
+# from components import memory_profiler
 class Page2(ft.Control):
     def __init__(self, page: ft.Page, pc, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.page = page
         self.pc = pc
 
-    @memory_profiler
+    # @memory_profiler
     def did_mount(self):
         self.page.session.set("last_page", "Page2")
         print('did mount page 2')

@@ -99,6 +99,7 @@ jobs:
         fi
 
     - name: Upload APK Artifact
+      if: env.APK_PATH
       uses: actions/upload-artifact@v4.3.4
       with:
         name: apk-build-artifact
@@ -107,6 +108,7 @@ jobs:
         overwrite: false
 
     - name: Upload AAB Artifact
+      if: env.AAB_PATH
       uses: actions/upload-artifact@v4.3.4
       with:
         name: aab-build-artifact

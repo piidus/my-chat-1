@@ -1,4 +1,4 @@
-name: All Builds (Linux, macOS, Windows, Android, IPA, APK, AAB)
+name: APK and AAB Build
 
 on:
   push:
@@ -15,14 +15,12 @@ env:
   BUILD_NUMBER: 1
   BUILD_VERSION: 1.0.0
   PYTHON_VERSION: 3.12.2
-  FLUTTER_VERSION: 3.24.0
-  SDK_VERSION: 35
-  BUILD_TOOLS_VERSION: 34
+  FLUTTER_VERSION: 3.24
   APK_PATH: "build/apk/app-release.apk"
   AAB_PATH: "build/aab/app-release.aab"
 
 jobs:
-  build-apk:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -50,66 +48,19 @@ jobs:
         distribution: 'temurin'
         java-version: '21'
 
-    - name: Setup Android SDK and Build Tools
-      uses: android-actions/setup-android@v1
-      with:
-        sdk-version: ${{ env.SDK_VERSION }}
-        build-tools: ${{ env.BUILD_TOOLS_VERSION }}
-
-    - name: Clean Build Directory and Flutter
-      run: |
-        echo "Cleaning build directories and Flutter..."
-        rm -rf build
-        if [ -f "pubspec.yaml" ]; then
-          flutter clean
-          echo "Flutter cleaned successfully."
-        else
-          echo "No pubspec.yaml found. Skipping Flutter clean."
-        fi
-
-    - name: Verify Flutter and Flet Installation
-      run: |
-        echo "Verifying Flutter and Flet installation..."
-        flutter doctor
-        flet --version
-
     - name: Configure Flutter
       run: |
-        if [ -f "pubspec.yaml" ]; then
-          flutter config --no-analytics
-          echo "Flutter configured successfully."
-        else
-          echo "No pubspec.yaml found. Skipping Flutter configuration."
-        fi
+        flutter config --no-analytics
 
-    - name: Flet Build APK
+    - name: Build APK and AAB
       run: |
-        if [ -f "pubspec.yaml" ]; then
-          echo "Starting Flet APK build..."
-          flet build apk --verbose --build-number=$BUILD_NUMBER --build-version=$BUILD_VERSION 2>&1 | tee flet_build.log
-          echo "Flet APK build completed."
-        else
-          echo "No pubspec.yaml found. Skipping APK build."
-        fi
-
-    - name: Flet Build AAB
-      run: |
-        if [ -f "pubspec.yaml" ]; then
-          echo "Starting Flet AAB build..."
-          flet build aab --verbose --build-number=$BUILD_NUMBER --build-version=$BUILD_VERSION 2>&1 | tee flet_build.log
-          echo "Flet AAB build completed."
-        else
-          echo "No pubspec.yaml found. Skipping AAB build."
-        fi
+        flet build apk --build-version ${{ env.BUILD_VERSION }} --build-number ${{ env.BUILD_NUMBER }} --verbose
+        flet build aab --build-version ${{ env.BUILD_VERSION }} --build-number ${{ env.BUILD_NUMBER }} --verbose
 
     - name: List All Files in Build Directory
       run: |
-        if [ -d "build" ]; then
-          echo "Listing all files in the build directory:"
-          find build -type f -print
-        else
-          echo "Build directory does not exist. Skipping file listing."
-        fi
+        echo "Listing all files in the build directory:"
+        find build -type f -print
 
     - name: Verify APK and AAB Existence
       id: verify-files
@@ -133,14 +84,14 @@ jobs:
       uses: actions/upload-artifact@v4.3.4
       with:
         name: apk-build-artifact
-        path: build/apk
-        if-no-files-found: warn
+        path: ${{ env.APK_PATH }}
+        if-no-files-found: error
         overwrite: false
 
     - name: Upload AAB Artifact
       uses: actions/upload-artifact@v4.3.4
       with:
         name: aab-build-artifact
-        path: build/aab
-        if-no-files-found: warn
+        path: ${{ env.AAB_PATH }}
+        if-no-files-found: error
         overwrite: false

@@ -26,12 +26,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-    
-    - name: Clean Build Directory
-      run: |
-        echo "Cleaning build directory..."
-        rm -rf build
-        flutter clean
 
     - name: Setup Python ${{ env.PYTHON_VERSION }}
       uses: actions/setup-python@v5
@@ -48,13 +42,23 @@ jobs:
       with:
         flutter-version: ${{ env.FLUTTER_VERSION }}
 
+    - name: Clean Build Directory
+      run: |
+        echo "Checking if Flutter is available..."
+        if command -v flutter >/dev/null 2>&1; then
+          echo "Flutter found. Cleaning build directory..."
+          flutter clean
+        else
+          echo "Flutter not found. Skipping clean step."
+        fi
+        echo "Removing build directory..."
+        rm -rf build
+
     - name: Setup Java JDK
       uses: actions/setup-java@v4.2.1
       with:
         distribution: 'temurin'
         java-version: '21'
-
-    
 
     - name: Configure Flutter
       run: |
@@ -106,5 +110,3 @@ jobs:
         path: ${{ env.AAB_PATH }}
         if-no-files-found: error
         overwrite: false
-
-

@@ -13,11 +13,12 @@ class Page2(ft.Control):
         self.page.update()
 
     def content(self):
-        return ft.Column(
+        last_page = self.page.session.get("last_page")
+        return ft.Column(            
             controls=[
                 ft.Text("This is Page 2"),
                 ft.ElevatedButton("Go to Page 1", on_click=lambda _: self.pc.load_page("Login")),
-                ft.Text(f"Last Page: {self.page.session.get("last_page")}", selectable=False),
+                ft.Text(f"Last Page: {last_page}", selectable=False),
             
             ]
         )

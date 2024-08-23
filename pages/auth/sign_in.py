@@ -14,10 +14,11 @@ class Login(ft.Control):
 
 
     def content(self):
+        last_page = self.page.session.get("last_page")
         return ft.Column(
             controls=[
                 ft.Text("This is Page 1"),
                 ft.ElevatedButton("Go to Page 2", on_click=lambda _: self.pc.load_page("Page2")),
-                ft.Text(f"Last Page: {self.page.session.get("last_page")}", selectable=False),
+                ft.Text(f"Last Page: {last_page}", selectable=False),
             ]
         )

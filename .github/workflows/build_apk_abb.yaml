@@ -26,6 +26,12 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+    
+    - name: Clean Build Directory
+      run: |
+        echo "Cleaning build directory..."
+        rm -rf build
+        flutter clean
 
     - name: Setup Python ${{ env.PYTHON_VERSION }}
       uses: actions/setup-python@v5
@@ -48,11 +54,7 @@ jobs:
         distribution: 'temurin'
         java-version: '21'
 
-    - name: Clean Build Directory
-      run: |
-        echo "Cleaning build directory..."
-        rm -rf build
-        flutter clean
+    
 
     - name: Configure Flutter
       run: |
@@ -105,4 +107,4 @@ jobs:
         if-no-files-found: error
         overwrite: false
 
-        
+

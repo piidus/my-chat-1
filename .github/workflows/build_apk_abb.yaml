@@ -34,12 +34,12 @@ jobs:
           echo "pubspec.yaml found. Checking if Flutter is available..."
           if command -v flutter >/dev/null 2>&1; then
             echo "Flutter found. Cleaning build directory..."
-            flutter clean
+            flutter clean || { echo "Flutter clean failed"; exit 1; }
           else
             echo "Flutter not found. Skipping clean step."
           fi
           echo "Removing build directory..."
-          rm -rf build
+          rm -rf build || { echo "Failed to remove build directory"; exit 1; }
         else
           echo "No pubspec.yaml found. Skipping clean step."
         fi
@@ -51,8 +51,9 @@ jobs:
 
     - name: Install Python Dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+        echo "Installing Python dependencies..."
+        python -m pip install --upgrade pip || { echo "Failed to upgrade pip"; exit 1; }
+        pip install -r requirements.txt || { echo "Failed to install requirements"; exit 1; }
 
     - name: Setup Flutter ${{ env.FLUTTER_VERSION }}
       uses: subosito/flutter-action@v2
@@ -68,24 +69,24 @@ jobs:
     - name: Verify Flutter Installation
       run: |
         echo "Checking Flutter version..."
-        flutter --version
+        flutter --version || { echo "Flutter command failed"; exit 1; }
 
     - name: Configure Flutter
       run: |
         echo "Configuring Flutter..."
-        flutter config --no-analytics
+        flutter config --no-analytics || { echo "Flutter config failed"; exit 1; }
 
     - name: Build APK and AAB
       run: |
         echo "Starting APK and AAB build..."
-        echo "Flet build apk command:"
-        flet build apk --build-version ${{ env.BUILD_VERSION }} --build-number ${{ env.BUILD_NUMBER }} --verbose
-        echo "Flet build aab command:"
-        flet build aab --build-version ${{ env.BUILD_VERSION }} --build-number ${{ env.BUILD_NUMBER }} --verbose
+        echo "Running flet build apk command..."
+        flet build apk --build-version ${{ env.BUILD_VERSION }} --build-number ${{ env.BUILD_NUMBER }} --verbose || { echo "Flet build apk failed"; exit 1; }
+        echo "Running flet build aab command..."
+        flet build aab --build-version ${{ env.BUILD_VERSION }} --build-number ${{ env.BUILD_NUMBER }} --verbose || { echo "Flet build aab failed"; exit 1; }
 
     - name: List All Files in Build Directory
       run: |
-        echo "Listing all files in the build directory:"
+        echo "Listing all files in the build directory..."
         find build -type f -print || echo "Build directory does not exist or is empty."
 
     - name: Verify APK and AAB Existence

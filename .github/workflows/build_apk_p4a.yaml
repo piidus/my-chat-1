@@ -1,4 +1,4 @@
-name: Build APK via p4a
+name: Build APK via p4a1
 
 on:
   push:

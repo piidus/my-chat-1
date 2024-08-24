@@ -1,6 +1,6 @@
 name: APK and AAB Build
 
-on:
+# on:
   push:
     branches:
       - master

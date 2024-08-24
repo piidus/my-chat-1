@@ -1,0 +1,66 @@
+name: Build APK
+
+on:
+  push:
+    branches:
+      - main  # Trigger the build on every push to the main branch
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      ANDROID_SDK_ROOT: ${{ secrets.ANDROID_SDK_ROOT }}
+      ANDROID_NDK_HOME: ${{ secrets.ANDROID_NDK_HOME }}
+      JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64  # Adjust to the Java version you're using
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '11'
+
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'
+
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install python-for-android flet sqlalchemy cryptography  # Add other dependencies here
+
+    - name: Set up Android SDK
+      uses: android-actions/setup-android@v2
+      with:
+        api-level: 30
+        build-tools: 30.0.3
+
+    - name: Install Android NDK
+      run: |
+        sdkmanager --install "ndk;21.1.6352462"
+
+    - name: Build APK
+      run: |
+        p4a apk --private . \
+        --package=org.example.myapp \
+        --name "MyApp" \
+        --version 0.1 \
+        --bootstrap=webview \
+        --requirements=python3,kivy,flet,sqlalchemy,cryptography \
+        --arch=arm64-v8a,armeabi-v7a,x86_64 \
+        --dist-name mydist \
+        --ndk-api=21
+
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: myapp-apk
+        path: mydist/bin/MyApp-0.1-arm64-v8a.apk  # Adjust the path to your APK file

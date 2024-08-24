@@ -1,4 +1,4 @@
-name: Build APK via p4a1
+name: Build APK via p4a
 
 on:
   push:
@@ -60,6 +60,10 @@ jobs:
     - name: Verify NDK installation
       run: |
         ls -l $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/clang
+
+    - name: Verify SDK installation
+      run: |
+        sdkmanager --list
 
     - name: Build APK
       run: |

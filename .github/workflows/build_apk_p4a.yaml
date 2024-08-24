@@ -1,4 +1,4 @@
-name: Build APK
+name: Build APK via p4a
 
 on:
   push:
@@ -55,7 +55,7 @@ jobs:
         --version 0.1 \
         --bootstrap=webview \
         --requirements=python3,kivy,flet,sqlalchemy,cryptography \
-        --arch=arm64-v8a,armeabi-v7a,x86_64 \
+        --arch=arm64-v8a --arch=armeabi-v7a --arch=x86_64 \
         --dist-name mydist \
         --ndk-api=21
 

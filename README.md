@@ -87,3 +87,14 @@ buildozer -v android debug
 ```bash
 buildozer -v android release
 ```
+# convert the library
+```bash
+p4a create --requirements sqlalchemy,cryptography --arch arm64-v8a --arch armeabi-v7a --arch x86_64 --sdk-dir $ANDROID_SDK_ROOT --ndk-dir $ANDROID_NDK_HOME --dist-name mydist --ndk-api=23
+```
+```bash
+p4a create --requirements sqlalchemy,cryptography --arch arm64-v8a --arch armeabi-v7a --arch x86_64 --sdk-dir $ANDROID_SDK_ROOT --ndk-dir $ANDROID_NDK_HOME --dist-name mydist --ndk-api=21
+```
+-   for rust
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```

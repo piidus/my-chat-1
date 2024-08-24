@@ -15,7 +15,8 @@ jobs:
     env:
       ANDROID_SDK_ROOT: ${{ secrets.ANDROID_SDK_ROOT }}
       ANDROID_NDK_HOME: ${{ secrets.ANDROID_NDK_HOME }}
-      JAVA_HOME: /usr/lib/jvm/java-8-openjdk-amd64  # Adjust to Java 8
+      JAVA_HOME: /usr/lib/jvm/java-8-openjdk-amd64
+      PATH: ${{ secrets.ANDROID_NDK_HOME }}/toolchains/llvm/prebuilt/linux-x86_64/bin:${{ env.PATH }}
 
     steps:
     - name: Checkout code
@@ -55,6 +56,10 @@ jobs:
     - name: Install JAXB
       run: |
         sudo apt-get install -y libjaxb-java
+
+    - name: Verify NDK installation
+      run: |
+        ls -l $ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/clang
 
     - name: Build APK
       run: |

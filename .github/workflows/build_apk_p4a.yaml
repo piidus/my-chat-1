@@ -15,17 +15,17 @@ jobs:
     env:
       ANDROID_SDK_ROOT: ${{ secrets.ANDROID_SDK_ROOT }}
       ANDROID_NDK_HOME: ${{ secrets.ANDROID_NDK_HOME }}
-      JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64  # Adjust to the Java version you're using
+      JAVA_HOME: /usr/lib/jvm/java-8-openjdk-amd64  # Adjust to the Java version you're using
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up JDK 11
+    - name: Set up JDK 8
       uses: actions/setup-java@v2
       with:
         distribution: 'adopt'
-        java-version: '11'
+        java-version: '8'
 
     - name: Set up Python 3.12.2
       uses: actions/setup-python@v2

@@ -74,7 +74,7 @@ buildozer init
 ```
 -   add requiremts in build.spec
 ```bash
-requirements = python3,kivy,flet,rsa,sqlalchemy
+requirements = python3,flet,cryptography,sqlalchemy
 ```
 -   android.permissions: Add any necessary Android permissions (e.g., for internet access).
 ```bash
@@ -86,6 +86,11 @@ buildozer -v android debug
 ```
 ```bash
 buildozer -v android release
+```
+-   to clean previous 
+```bash
+buildozer android clean
+buildozer android debug
 ```
 # convert the library
 ```bash
